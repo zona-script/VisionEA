@@ -1,0 +1,16 @@
+<style>
+	html {
+
+	}
+	
+	.card-fix{
+		height: 100%;
+	}
+	
+	#loadPage {
+		height: 500px;
+		border: 0;
+		width : 99.0%; 
+	}
+	
+</style>

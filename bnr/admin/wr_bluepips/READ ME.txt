@@ -1,0 +1,6 @@
+27 Mei 2020
+File Index dan inc_functions_wr sudah diupdate menggunakan json.
+
+Upload ke 2 file ini saat update sistem baru.
+
+EA dan Generate sdh diupdate menggunakan Json juga.

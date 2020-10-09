@@ -1,0 +1,150 @@
+<style>
+	html {
+
+	}
+
+	.profile{
+		font-weight: bold;
+	}
+
+
+	.card-fix{
+		height: 100%;
+	}
+	
+	#loadPage {
+		height: 580px;
+		border: 0;
+		width : 99.0%; 
+	}
+
+
+	.text-vCenter{
+		padding-top:15px;
+	}
+	
+	img.node{
+		text-align:center;
+		width: 50%;
+    	border-radius: 50%;
+	}
+	
+	img.tree{
+		width: 100%;
+		height: 50px;
+
+	}
+	table.tree{
+		width:100%;	
+	}
+	tr.tree{
+		width:100%;
+	}
+	
+	td.tree{
+		text-align:center;
+		padding: 0px;	
+		width:14.2857%
+	}
+	
+	.popup-node{
+		position:absolute;
+		width: 250px;
+	}
+
+
+
+
+/* The Modal (background) */
+.modal, .modal-2 {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 2px;
+}
+.modal-2{
+	padding-top: 5%;
+}
+
+/* Modal Content/Box */
+.modal-content, .modal-content-2 {
+    background-color: #fefefe;
+    margin: 2% auto 4% auto; /* 2% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 35%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content-2 {
+	width: 60%; 
+	padding: 50px;
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+    
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 500px) {
+   .modal-content {
+		background-color: #fefefe;
+		margin: 4% auto 4% auto; /* 5% from the top, 15% from the bottom and centered */
+		border: 1px solid #888;
+		width: 80%; /* Could be more or less, depending on screen size */
+	}
+
+	.profile-val{
+		padding-left: 25px;
+	}
+	
+}
+
+@media screen and (max-width: 350px) {
+	
+	.modal-content {
+		background-color: #fefefe;
+		margin: 4% auto 4% auto; /* 5% from the top, 15% from the bottom and centered */
+		border: 1px solid #888;
+		width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	.profile-val{
+		padding-left: 25px;
+	}
+	
+}
+</style>

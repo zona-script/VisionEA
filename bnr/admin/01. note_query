@@ -1,0 +1,176 @@
+
+Cron Job Schedulues:
+1 17 * * *	wget -O /dev/null https://visionea.net/bnr/admin/cron_general.php?act=corn&cat=renew_reminder&code=Rah45!a	 
+45 * * * *	wget -O /dev/null https://visionea.net/bnr/admin/cron_general.php?act=corn&cat=general&code=Rah45!a	 
+30 16 * * *	wget -O /dev/null https://visionea.net/bnr/admin/cron_general.php?act=corn&cat=bday&code=Rah45!a	 
+10 * * * *	wget -O /dev/null https://visionea.net/bnr/admin/sendCornEmail.php?key=rAha$!4_corn	 
+5 16 * * *	wget -O /dev/null https://visionea.net/bnr/admin/postPairing_Matching.php?act=posting&cat=pair&code=Rah45!a
+
+better to use:
+5 16 * * *	/usr/bin/curl -I https://visionea.net/bnr/admin/postPairing_Matching.php?act=posting&cat=pair&code=Rah45!a
+
+
+VisionEA
+//Query for reset Matching Bonus
+INSERT INTO dtMatching (mtchUsername, mtchDate, mtchPair, mtchAmount)
+SELECT genSPUsername, CONCAT(Date(pairDate), ' 19:05:02'), pairUsername, (pairTO * 0.1) AS bnsMatching FROM dtDailyPairing 
+INNER JOIN dtGenSponsorship ON pairUsername=genMbrUsername
+WHERE pairTO > 0
+AND pairUsername in (
+    SELECT genMbrUsername FROM dtGenSponsorship 
+    )
+
+
+
+//Turn Over LeaderShip
+SELECT m.mbrSponsor as Sponsor, SUM(pacPrice) as turnOver FROM dtMember AS m
+    INNER JOIN (
+        SELECT * FROM Transaction t 
+        WHERE t.trID = (
+            SELECT trID FROM Transaction WHERE trUsername = t.trUsername 
+            ORDER BY trDate DESC LIMIT 1
+            )
+        ) t ON t.trUsername = mbrUsername
+    INNER JOIN msPackage ON pacID = t.trPacID
+    INNER JOIN dtMember AS sp ON sp.mbrUsername = m.mbrSponsor
+    WHERE Date(t.trDate) >= '2019-04-01'
+    GROUP BY Sponsor
+    ORDER BY turnOver DESC
+    LIMIT 10
+
+//TurnOver Detail
+SELECT m.mbrSponsor as Sponsor, sp.mbrFirstName as Name, m.mbrUsername as Member, pacPrice as turnOver FROM dtMember AS m
+INNER JOIN (
+    SELECT * FROM Transaction t 
+    WHERE t.trID = (
+        SELECT trID FROM Transaction WHERE trUsername = t.trUsername 
+        ORDER BY trDate DESC LIMIT 1
+        )
+	) t ON t.trUsername = mbrUsername
+INNER JOIN msPackage ON pacID = t.trPacID
+INNER JOIN dtMember AS sp ON sp.mbrUsername = m.mbrSponsor
+WHERE Date(t.trDate) >= '2019-04-01'
+AND sp.mbrusername IN (
+    SELECT Sponsor FROM (
+        	SELECT m.mbrSponsor as Sponsor, SUM(pacPrice) as turnOver FROM dtMember AS m
+            INNER JOIN (
+                SELECT * FROM Transaction t 
+                WHERE t.trID = (
+                    SELECT trID FROM Transaction WHERE trUsername = t.trUsername 
+                    ORDER BY trDate DESC LIMIT 1
+                    )
+                ) t ON t.trUsername = mbrUsername
+            INNER JOIN msPackage ON pacID = t.trPacID
+            INNER JOIN dtMember AS sp ON sp.mbrUsername = m.mbrSponsor
+            WHERE Date(t.trDate) >= '2019-04-01'
+            GROUP BY Sponsor
+            ORDER BY turnOver DESC
+            LIMIT 10
+        ) AS m
+    )
+ORDER BY m.mbrSponsor ASC, trDate Desc, Sponsor ASC
+
+
+
+
+//BONUS_SP_UP_20
+INSERT INTO dtCornEmail (cecat, ceUsername, cesendst, cedate)
+SELECT 'BONUS_SP_UP_20', mbrUsername, '20', CURRENT_TIME() FROM dtMember 
+	WHERE mbrStID = '8'
+	AND mbrUsername != "ultrarich"
+	AND mbrUsername != "ultrarich1"
+	AND mbrUsername != "ultrarich2"
+	AND mbrUsername != "borneoteam1"
+	AND mbrUsername != "borneoteam2"
+	AND mbrUsername != "captainamerica1"
+	AND mbrUsername != "captainamerica2"
+	AND mbrUsername != "fortune88"
+	AND mbrUsername != "fortune89"
+	AND mbrUsername != "VISIONEA"
+	AND mbrUsername != "VISIONEA-L1"
+	AND mbrUsername != "VISIONEA-L11"
+	AND mbrUsername != "VISIONEA-L12"
+	AND mbrUsername != "VISIONEA-L21"
+	AND mbrUsername != "VISIONEA-L22"
+	AND mbrUsername != "VISIONEA-R1"
+ORDER BY mbrDate ASC
+
+
+	
+
+//QUERY UTK EMAIL RENEW UTK PERTAMA KALI 
+INSERT INTO dtCornEmail (cecat, ceUsername, cesendst, cedate)
+	SELECT 'RENEW_REMINDER', trUsername, '20', CURRENT_TIME() FROM Transaction 
+	INNER JOIN dtMember ON trUsername = mbrUsername 
+	WHERE DATE(DATE_ADD(trDate, INTERVAL 11 MONTH)) <= CURRENT_DATE()  AND mbrStID = '8'
+	AND mbrUsername != "ultrarich"
+	AND mbrUsername != "ultrarich1"
+	AND mbrUsername != "ultrarich2"
+	AND mbrUsername != "borneoteam1"
+	AND mbrUsername != "borneoteam2"
+	AND mbrUsername != "captainamerica1"
+	AND mbrUsername != "captainamerica2"
+	AND mbrUsername != "fortune88"
+	AND mbrUsername != "fortune89"
+	AND mbrUsername != "VISIONEA"
+	AND mbrUsername != "VISIONEA-L1"
+	AND mbrUsername != "VISIONEA-L11"
+	AND mbrUsername != "VISIONEA-L12"
+	AND mbrUsername != "VISIONEA-L21"
+	AND mbrUsername != "VISIONEA-L22"
+	AND mbrUsername != "VISIONEA-R1"
+
+
+//QUERY UTK EMAIL RENEW CRON
+INSERT INTO dtCornEmail (cecat, ceUsername, cesendst, cedate)
+	SELECT 'RENEW_REMINDER', trUsername, '20', CURRENT_TIME() FROM Transaction 
+	INNER JOIN dtMember ON trUsername = mbrUsername 
+	WHERE DATE(DATE_ADD(trDate, INTERVAL 11 MONTH)) = CURRENT_DATE() AND mbrStID = '8'
+//--- letak code ini di cron_general dah..
+
+
+
+SELECT t.*, p.pacPrice, m.mbrSponsor FROM Transaction AS t INNER JOIN msPackage AS p on trPacID=pacID
+INNER JOIN dtMember AS m on mbrUsername = trUsername
+WHERE Date(trDate) BETWEEN '2019-02-01' AND '2019-03-31'
+AND trStatus = '10'
+ORDER by mbrSponsor ASC, trDate ASC
+
+
+//target 5000, periode 1feb - 31 maret
+SELECT m.mbrSponsor, SUM(pacPrice) as sumTO
+FROM Transaction AS t INNER JOIN msPackage AS p on trPacID=pacID
+INNER JOIN dtMember AS m on mbrUsername = trUsername
+WHERE Date(trDate) BETWEEN '2019-02-01' AND '2019-03-31'
+AND trStatus = '10'
+GROUP BY mbrSponsor
+HAVING SUM(pacPrice) >= 5000
+
+//Detil nya..
+SELECT m.mbrSponsor, trUsername, pacName
+FROM Transaction AS t INNER JOIN msPackage AS p on trPacID=pacID
+INNER JOIN dtMember AS m on mbrUsername = trUsername
+WHERE Date(trDate) BETWEEN '2019-02-01' AND '2019-03-31'
+AND trStatus = '10'
+ORDER BY mbrSponsor
+
+
+
+//gabungan detal dan total diatas > 5000
+SELECT m.mbrSponsor AS Sponsor, trUsername AS Username, pacName AS Package, Date(trDate) AS RegDate
+FROM Transaction AS t INNER JOIN msPackage AS p on trPacID=pacID
+INNER JOIN dtMember AS m on mbrUsername = trUsername
+INNER JOIN (
+	SELECT m.mbrSponsor, SUM(pacPrice) as sumTO
+	FROM Transaction AS t INNER JOIN msPackage AS p on trPacID=pacID
+	INNER JOIN dtMember AS m on mbrUsername = trUsername
+	WHERE Date(trDate) BETWEEN '2019-02-01' AND '2019-03-31'
+	AND trStatus = '10'
+	GROUP BY mbrSponsor
+	HAVING SUM(pacPrice) >= 5000
+) AS q ON q.mbrSponsor = m.mbrSponsor
+WHERE Date(trDate) BETWEEN '2019-02-01' AND '2019-03-31'
+AND trStatus = '10'
+ORDER BY m.mbrSponsor, t.trDate ASC
+
+

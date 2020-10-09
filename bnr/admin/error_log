@@ -1,0 +1,1 @@
+[25-Nov-2019 14:00:04 Asia/Singapore] PHP Warning:  mysqli::__construct(): (HY000/1226): User 'u817475309_vea' has exceeded the 'max_user_connections' resource (current value: 15) in /home/u817475309/public_html/bnr/includes/inc_conn.php on line 8

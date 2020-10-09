@@ -1,0 +1,152 @@
+##Perbaiki tampilan history buy/sell product
+Purchased
+- Tampilkan list product yg di beli member (RO, ACTIVATION MEMBER, RENEW)
+Sale
+- Tampilkan list product yg di jual member (RESSELEER, ACTIOVATION) 
+
+
+##TAMBAH FIELD dtBnsRO
+ALTER TABLE `dtBnsRO` ADD `BnsROUsername` VARCHAR(16) NOT NULL COMMENT 'Bonus To' AFTER `BnsROID`;
+
+##UPDATE FIELD dtBnsRO
+UPDATE dtBnsRO SET BnsROUsername = ( SELECT trProUsername FROM trProduct WHERE trProTransID = BnsROID);
+
+##PERBAIKI HITUNG BONUS
+- Update Database
+- trProduct.php (tambahkan insert ke BnsROUSername)
+- inc_commission.php (perbaiki function fSumCommissionRO)
+
+
+#Perbaiki Report Admin
+- index.php
+- reportPromo.php
+- achiever.php
+- repportMember.php
+
+#Munculkan status member di member Active (admin)
+- membership.php
+
+#PERBAIKI TEXT (member/verify)
+- index.php
+- confirmCode.php (bagian no session)
+
+#TAMBAHKAN EMAIL BUY PIN APPROVED/DECLINED
+- inc_functions.php
+	q = BUY_PIN_APPROVED
+	q = BUY_PIN_DECLINED
+- incomingDepo.php (Admin)
+- json.php (admin)
+	q = declinedDataDeposit
+	q = checkAndSaveDataDeposit
+
+#PERBAIKI EMAIL (TRANSLATE KE INDONESIA & BUTTON MEMBER AREA) <<<<<< DONE
+- inc_functions.php (all vision fsendNotifEmail)
+- fsendNotifToEmail UPDATE_ACCOUNT => UPDATE_PAYMENT_ACCOUNT
+- profile.php UPDATE_ACCOUNT => UPDATE_PAYMENT_ACCOUNT
+
+#TOMBOL RESEND REQUEST WITHDRAWAL (ADMIN)
+### sql rowpending, select wdstid, if status request, tombol resend, jquery resend, json send email.
+- requestWd.php
+- json.php
+
+#TAMBAHKAN CSS BUTTON DI EMAIL
+- inc_functions.php (fgetEmailBody / format_promo & format_general)
+	'<style type="text/css"> .button {border: none;background: #E91E63;color: #ffffff;padding: 10px;display: inline-block;margin: 10px 0px;font-family: Helvetica, Arial, sans-serif;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;text-decoration: none;}.button:hover {color: #ffffff;background: #666;text-decoration: none;}</style>'
+
+#TAMPILKAN INFORMASI HISTORY LOGIN
+- cekAuth.php
+- inc_browser_detector.php
+- inc_functions.php (fBrowserDetector)
+
+#Perbaiki Tampilan Forget Password (member)
+- forgerPassword.php
+
+#Perbaiki proses renew
+- renewPac.php
+
+PERBAIKI FUNCTION fSumCommissionRO
+- inc_commission.php
+
+register tidak boleh username reseller (done)
+- getData.php
+- register.php
+- newReglink.php
+
+_____________________________
+Update halaman dashboard admin (done)
+- dashboard.php
+- inc_func_admin.php
+- load_num_member.php
+
+Tampilkan bukti transfer di deposit (admin area) (done)
+- inc_funtions.php (REQUEST_BUY_VOUCHER)
+- reqBuyVoucher.php
+- incomingDepo.php (admin)
+- json.php (admin)
+
+VERIFIKASI KTP (done)
+- profile.php
+- activateMember.php
+- register.php
+- newReglink.php
+
+PERBAIKI TRASNFER PIN (MUNCUL TEXT TRANSFER SUCCESS)
+- doTransfer.php (done)
+
+
+MEMBER EXPIRED <= 7 HARI BOLEH RENEW (ARAHKAN KE FORM RENEW) (done)
+- login.php
+- cekAuth.php
+- renewPac.php
+- profile.php
+- leftNav.php
+- index.php (member)
+- inc_fucntions.php (fCekVerificationID)
+
+
+CHANGE PASSWORD MEMBER PERBAIKI ID="ACT" MULTIPLE (done)
+- changePassword.php (member)
+
+VERIFY/INDEX (EMAIL) ubah ke bahasa indonesia (done)
+- index.php (verify)
+
+UPDATE FOR APPS (waiting Eko)
+- inc_fucntion.api.php
+- index.php
+
+PERBAIKI CURL
+- inc_function.php (done)
+	function
+	 - resultJSON
+	 - fCurl
+- inc_function_api.php (belum, cek lagi samakan dengan hostinger)
+- json.php (done)
+- activateMember.php (done)
+
+################################ 
+Note :
+mbrDate(fortune) 2018-05-07 00:00:00.000000
+
+UPDATE dtMember a, (
+	SELECT mbrUsername, mbrDate, DATE_ADD( DATE(mbrDate), INTERVAL (trThn * 12) MONTH ) AS expiredDate, DATE_ADD( DATE_ADD( DATE(mbrDate), INTERVAL (trThn * 12) MONTH ), INTERVAL 7 DAY) blockedDate 
+    FROM dtMember 
+    INNER JOIN ( SELECT * FROM Transaction AS t WHERE t.trID = (SELECT trID FROM Transaction WHERE trUsername = t.trUsername ORDER BY trDate DESC LIMIT 1) ) AS t ON t.trUsername = mbrUsername 
+    WHERE mbrStID = '8'
+	HAVING date(blockedDate) < CURRENT_DATE
+) t1
+SET  a.mbrStID = '6'
+WHERE a.mbrUsername = t1.mbrUsername
+
+filter tahun bulan pada dashboard admin (belum fix)
+
+Update
+- beneficiary.php
+
+Cara baca cronjob
+
+* * * * *
+*ke 1
+*ke 2
+*ke 3
+*ke 4
+*ke 5

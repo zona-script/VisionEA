@@ -1,0 +1,28 @@
+<style>
+	html {
+
+	}
+	
+	.card-fix{
+		height: 100%;
+	}
+	
+	#loadPage {
+		height: 500px;
+		border: 0;
+		width : 99.0%; 
+	}
+	.text-vCenter{
+		padding-top:15px;
+	}
+	
+	.node{
+		text-align:center;
+	}
+	
+	img.tree{
+		width : 50px;
+		height: 50px;	
+	}
+	
+</style>

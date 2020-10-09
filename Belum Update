@@ -1,0 +1,23 @@
+PINDAHKAN KE UPDATED FILE JIKA SUDAH FIX
+----------------------------------------
+##UPDATE DATABASE TABLE dtBugReport
+	
+CREATE TABLE `dtBugReport` (
+ `bugID` varchar(10) NOT NULL,
+ `bugUsername` varchar(50) NOT NULL,
+ `bugOS` varchar(10) NOT NULL,
+ `bugDevice` varchar(10) NOT NULL,
+ `bugMenu` varchar(30) NOT NULL,
+ `bugDesc` text NOT NULL,
+ `bugDate` datetime NOT NULL DEFAULT current_timestamp(),
+ `bugStatus` int(1) NOT NULL DEFAULT 0 COMMENT '0:Unread; 1:Read; 2:Replied',
+ PRIMARY KEY (`bugID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+
+##BUAT TAMPILAN LAPORAN BUG (KHUSUS APPS) DI ADMIN
+- reportBugs.php
+- index.php (tambah navigator Report Bugs)
+
+
+
